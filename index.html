@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexora | Coal & Petroleum</title>
+    <style>
+        /* --- NEXORA INDUSTRIAL THEME VARIABLES --- */
+        :root {
+            /* Backgrounds */
+            --bg-black: #050505;
+            --bg-panel: #121212;
+            --bg-card: #1a1a1a;
+
+            /* Text */
+            --text-white: #ffffff;
+            --text-muted: #b0b0b0;
+
+            /* Industrial Accents */
+            --fuel-orange: #ff9800;   /* Coal / Fire */
+            --oil-blue: #00bcd4;     /* Petroleum / Refining */
+            --gas-green: #00e676;    /* Natural Gas / Renewable */
+            --danger-red: #ff1744;   /* Depletion */
+            --border-color: #333333;
+
+            /* Fonts */
+            --font-mono: 'Courier New', Courier, monospace;
+            --font-sans: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        /* --- RESET --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: var(--bg-black);
+            color: var(--text-muted);
+            font-family: var(--font-sans);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* --- TYPOGRAPHY --- */
+        h1, h2, h3, h4 { color: var(--text-white); margin-bottom: 1rem; font-weight: 700; }
+        h1 { font-size: 3.5rem; letter-spacing: -1px; color: var(--fuel-orange); }
+        h2 { 
+            font-size: 2rem; 
+            margin-bottom: 30px; 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            margin-top: 80px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+        h3 { font-size: 1.5rem; margin-top: 30px; color: var(--fuel-orange); }
+        h4 { font-size: 1.2rem; margin-top: 20px; color: #ddd; }
+        p { margin-bottom: 15px; font-size: 1.05rem; }
+        ul { margin-left: 20px; margin-bottom: 20px; }
+        li { margin-bottom: 8px; }
+
+        /* --- LAYOUT --- */
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 25px; }
+        section { padding: 60px 0; border-bottom: 1px solid #1f1f1f; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; }
+
+        /* --- NAVIGATION --- */
+        nav {
+            background: rgba(5, 5, 5, 0.95);
+            border-bottom: 1px solid var(--border-color);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+        .nav-inner { display: flex; justify-content: space-between; align-items: center; }
+        .nexora-logo { font-family: var(--font-mono); font-weight: bold; font-size: 1.2rem; color: #fff; display: flex; align-items: center; gap: 10px; }
+        .nav-links { display: flex; gap: 20px; list-style: none; }
+        .nav-links a { font-size: 0.9rem; color: var(--text-muted); text-decoration: none; transition: 0.3s; }
+        .nav-links a:hover { color: var(--fuel-orange); text-shadow: 0 0 5px var(--fuel-orange); }
+
+        /* --- HERO --- */
+        #intro { 
+            text-align: center; 
+            padding: 150px 20px; 
+            /* Industrial Grid Pattern */
+            background: 
+                linear-gradient(rgba(5,5,5,0.9), rgba(5,5,5,0.9)),
+                repeating-linear-gradient(45deg, #111 0px, #111 2px, transparent 2px, transparent 10px);
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            border: 1px solid var(--fuel-orange);
+            color: var(--fuel-orange);
+            text-decoration: none;
+            text-transform: uppercase;
+            font-family: var(--font-mono);
+            font-weight: bold;
+            margin-top: 20px;
+            transition: 0.3s;
+        }
+        .btn:hover { background: var(--fuel-orange); color: #000; box-shadow: 0 0 15px var(--fuel-orange); }
+
+        /* --- CARDS & VISUALS --- */
+        .card {
+            background: var(--bg-card);
+            padding: 25px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            transition: 0.3s;
+        }
+        .card:hover { transform: translateY(-5px); border-color: var(--fuel-orange); }
+
+        .visual-box {
+            width: 100%;
+            height: 250px;
+            background: #000;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            border: 1px solid #333;
+        }
+        svg { width: 120px; height: 120px; }
+
+        /* --- REFINING TABLE --- */
+        .distillation-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: var(--bg-card);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .distillation-table th, .distillation-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+        .distillation-table th { background: #252525; color: var(--oil-blue); font-family: var(--font-mono); }
+
+        /* --- RESOURCE COMPARISON --- */
+        .resource-compare { margin-top: 30px; }
+        .res-col { background: var(--bg-panel); padding: 20px; border-radius: 8px; border-top: 4px solid #555; }
+        .res-col.renew { border-color: var(--gas-green); }
+        .res-col.non-renew { border-color: var(--danger-red); }
+
+        /* --- QUIZ --- */
+        .quiz-section { background: linear-gradient(180deg, var(--bg-black) 0%, #1a0f00 100%); }
+        .quiz-box {
+            background: var(--bg-card);
+            padding: 40px;
+            border: 1px solid var(--fuel-orange);
+            border-radius: 10px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .q-item { margin-bottom: 25px; border-bottom: 1px solid #333; padding-bottom: 20px; }
+        .q-item h4 { color: var(--text-white); margin-bottom: 15px; }
+        .options label {
+            display: block;
+            padding: 12px;
+            background: rgba(255,255,255,0.05);
+            cursor: pointer;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            transition: 0.2s;
+        }
+        .options label:hover { background: rgba(255, 152, 0, 0.1); }
+        .options input { margin-right: 10px; accent-color: var(--fuel-orange); }
+        #quiz-result { margin-top: 20px; text-align: center; font-weight: bold; padding: 15px; border-radius: 5px; display: none; }
+
+        /* --- FOOTER --- */
+        footer { background: #000; padding: 60px 0; border-top: 1px solid #222; text-align: center; }
+        .footer-logo { margin-bottom: 20px; justify-content: center; display: flex; align-items: center; gap: 10px; color: #fff; font-weight: bold; font-family: var(--font-mono); }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .grid-2, .grid-3 { grid-template-columns: 1fr; }
+            .nav-links { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVIGATION -->
+    <nav>
+        <div class="container nav-inner">
+            <a href="#" class="nexora-logo">
+                <svg width="24" height="24" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M50 5 L93 27.5 V72.5 L50 95 L7 72.5 V27.5 L50 5Z" fill="none" stroke="#ff9800" stroke-width="10"/>
+                    <circle cx="50" cy="50" r="10" fill="#ff9800"/>
+                </svg>
+                NEXORA
+            </a>
+            <ul class="nav-links">
+                <li><a href="#coal">Coal</a></li>
+                <li><a href="#petroleum">Petroleum</a></li>
+                <li><a href="#natural-gas">Natural Gas</a></li>
+                <li><a href="#resources">Resources</a></li>
+                <li><a href="#quiz">Quiz</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 1. INTRO -->
+    <section id="intro">
+        <div class="container">
+            <h1 style="color: var(--fuel-orange);">Coal & Petroleum</h1>
+            <p style="max-width: 700px; margin: 0 auto 30px auto; font-size: 1.2rem; color: #ccc;">
+                The "Black Gold" of the earth. These fossil fuels power our industries and vehicles, but they are finite resources formed over millions of years.
+            </p>
+            <a href="#coal" class="btn">Start Extraction</a>
+        </div>
+    </section>
+
+    <!-- 2. COAL & 3. HISTORY OF COAL -->
+    <section id="coal">
+        <div class="container">
+            <div class="grid-2">
+                <div>
+                    <h2>2. Coal</h2>
+                    <p>
+                        Coal is a hard, black, combustible mineral. It is the most widely used fossil fuel for generating electricity in thermal power plants.
+                    </p>
+                    <p>
+                        <strong>Formation:</strong> Coal was formed millions of years ago when giant forests got buried under layers of soil. Due to high pressure and heat inside the earth, the buried plants slowly converted into coal. This process is called <strong>Carbonization</strong>.
+                    </p>
+                    
+                    <h3>3. History of Coal</h3>
+                    <p>
+                        Coal has been used as an energy source since ancient times. However, it became the primary fuel for the Industrial Revolution in the 18th and 19th centuries, powering steam engines and trains.
+                    </p>
+                </div>
+                <div class="visual-box">
+                    <!-- Internal SVG Drawing of Coal -->
+                    <svg viewBox="0 0 100 100">
+                        <path d="M20 60 Q10 50 25 40 T40 30 T60 35 T80 50 T90 70 T70 85 T40 80 T20 60 Z" fill="#333" stroke="#555" stroke-width="2"/>
+                        <path d="M25 45 L35 40 M45 35 L55 45 M65 40 L75 55 M30 55 L40 70 M55 65 L70 75" stroke="#111" stroke-width="2"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- COAL BY-PRODUCTS -->
+    <section>
+        <div class="container">
+            <h3>Useful Products of Coal</h3>
+            <p>When coal is processed in the industry, several useful by-products are obtained.</p>
+            
+            <div class="grid-3">
+                <!-- 4. COKE -->
+                <div class="card">
+                    <h4>4. Coke</h4>
+                    <p>Almost pure form of carbon. It is tougher than coal.</p>
+                    <p><strong>Uses:</strong> Used in the manufacture of steel and in the extraction of metals.</p>
+                </div>
+                <!-- 5. COAL TAR -->
+                <div class="card">
+                    <h4>5. Coal Tar</h4>
+                    <p>A thick, black liquid with an unpleasant smell.</p>
+                    <p><strong>Uses:</strong> Used for making roads (bitumen), synthetic dyes, explosives, and perfumes (naphthalene balls).</p>
+                </div>
+                <!-- 6. COAL GAS -->
+                <div class="card">
+                    <h4>6. Coal Gas</h4>
+                    <p>A mixture of hydrogen, methane, and carbon monoxide.</p>
+                    <p><strong>Uses:</strong> Used as a fuel in industries and for lighting in earlier times.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. PETROLEUM -->
+    <section id="petroleum">
+        <div class="container">
+            <div class="grid-2">
+                <div class="visual-box">
+                    <!-- Internal SVG Drawing of Oil Rig/Drill -->
+                    <svg viewBox="0 0 100 100">
+                        <rect x="45" y="10" width="10" height="80" fill="#444"/>
+                        <path d="M20 30 L80 30" stroke="#666" stroke-width="5"/>
+                        <path d="M35 50 L65 50" stroke="#666" stroke-width="5"/>
+                        <rect x="30" y="80" width="40" height="10" fill="#222"/>
+                        <path d="M40 90 Q50 100 60 90" fill="none" stroke="#00bcd4" stroke-width="2" stroke-dasharray="2,2"/>
+                        <text x="50" y="50" fill="#ff9800" font-size="8" text-anchor="middle" font-family="sans-serif">OIL</text>
+                    </svg>
+                </div>
+                <div>
+                    <h2 style="color: var(--oil-blue);">7. Petroleum</h2>
+                    <p>
+                        Petroleum is a dark, oily liquid with an unpleasant smell. It is also called <strong>"Black Gold"</strong>.
+                    </p>
+                    <p>
+                        <strong>Formation:</strong> It was formed from the remains of dead marine organisms (zooplankton and algae) buried under the ocean floor millions of years ago.
+                    </p>
+                    <p>
+                        <strong>Extraction:</strong> Petroleum is extracted by drilling wells into the oil reservoirs.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. REFINING OF PETROLEUM -->
+    <section>
+        <div class="container">
+            <h2>8. Refining of Petroleum</h2>
+            <p>Petroleum is a complex mixture of various hydrocarbons. It cannot be used as it is. It is refined in <strong>oil refineries</strong> by the process of <strong>Fractional Distillation</strong> to separate it into useful components.</p>
+
+            <table class="distillation-table">
+                <thead>
+                    <tr>
+                        <th>Component / Fraction</th>
+                        <th>Boiling Range</th>
+                        <th>Uses</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Petroleum Gas</strong></td>
+                        <td>Below 40°C</td>
+                        <td>Fuel for home and industry (LPG).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Petrol</strong></td>
+                        <td>40°C to 70°C</td>
+                        <td>Motor fuel, dry cleaning solvent.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Kerosene</strong></td>
+                        <td>170°C to 250°C</td>
+                        <td>Fuel for stoves, lamps, and jet aircraft.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Diesel</strong></td>
+                        <td>250°C to 350°C</td>
+                        <td>Fuel for heavy motor vehicles, electric generators.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Lubricating Oil</strong></td>
+                        <td>350°C to 400°C</td>
+                        <td>Lubricants for machines, wax, vaseline.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Bitumen (Asphalt)</strong></td>
+                        <td>Above 400°C</td>
+                        <td>Making roads, roofing.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- 9. NATURAL GAS -->
+    <section id="natural-gas">
+        <div class="container">
+            <div class="grid-2">
+                <div>
+                    <h2 style="color: var(--gas-green);">9. Natural Gas</h2>
+                    <p>
+                        Natural Gas is a very important fossil fuel found along with petroleum. It is easy to transport through pipes.
+                    </p>
+                    <p>
+                        <strong>Composition:</strong> It is a mixture of <strong>Methane (85%)</strong>, ethane, and propane.
+                    </p>
+                    <p>
+                        <strong>Uses:</strong>
+                        <ul>
+                            <li>Used as a fuel in homes and industries (CNG).</li>
+                            <li>Used as a raw material in the petrochemical industry.</li>
+                            <li>Used for generating electricity.</li>
+                        </ul>
+                    </p>
+                </div>
+                <div class="card" style="background: #0a1f0a; border-color: var(--gas-green); text-align: center;">
+                    <h3 style="color: var(--gas-green);">Clean Fuel</h3>
+                    <p>Natural Gas is considered a cleaner fuel than coal or petroleum because it burns easily and produces less smoke and harmful gases.</p>
+                    <div style="font-size: 3rem;">🔥💚</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 10 & 11. SOME NATURAL RESOURCES ARE LIMITED & TYPES -->
+    <section id="resources">
+        <div class="container">
+            <h2>10. Some Natural Resources are Limited</h2>
+            <p>
+                Coal, petroleum, and natural gas are <strong>Fossil Fuels</strong>. They take millions of years to form. Human beings are consuming them at a very fast rate.
+            </p>
+            <p>
+                At this rate of consumption, these fuels will be exhausted in the near future. Therefore, we must use them judiciously and conserve them.
+            </p>
+
+            <h3>11. Types of Resources</h3>
+            <p>Resources can be broadly classified based on their availability:</p>
+            
+            <div class="grid-2 resource-compare">
+                <!-- 12. RENEWABLE -->
+                <div class="res-col renew">
+                    <h4 class="text-green">12. Renewable Resources</h4>
+                    <p>Resources that can be replenished or reproduced by physical, chemical, or mechanical processes in a short period of time.</p>
+                    <div style="margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
+                        <span style="background: rgba(0,230,118,0.2); padding: 5px 10px; border-radius: 4px; font-size: 0.9rem;">☀️ Solar</span>
+                        <span style="background: rgba(0,230,118,0.2); padding: 5px 10px; border-radius: 4px; font-size: 0.9rem;">💨 Wind</span>
+                        <span style="background: rgba(0,230,118,0.2); padding: 5px 10px; border-radius: 4px; font-size: 0.9rem;">💧 Water</span>
+                    </div>
+                    <p style="margin-top: 10px; font-size: 0.9rem; color: #aaa;">Examples: Air, Water, Sunlight, Forests.</p>
+                </div>
+
+                <!-- 13. NON-RENEWABLE -->
+                <div class="res-col non-renew">
+                    <h4 class="text-red">13. Non-Renewable Resources</h4>
+                    <p>Resources that are present in limited quantities. Once consumed, they cannot be replenished by natural processes in a short period.</p>
+                    <div style="margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
+                        <span style="background: rgba(255,23,68,0.2); padding: 5px 10px; border-radius: 4px; font-size: 0.9rem;">🪨 Coal</span>
+                        <span style="background: rgba(255,23,68,0.2); padding: 5px 10px; border-radius: 4px; font-size: 0.9rem;">🛢️ Petroleum</span>
+                        <span style="background: rgba(255,23,68,0.2); padding: 5px 10px; border-radius: 4px; font-size: 0.9rem;">⛽ Natural Gas</span>
+                    </div>
+                    <p style="margin-top: 10px; font-size: 0.9rem; color: #aaa;">Examples: Minerals, Fossil Fuels, Metals.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- QUIZ -->
+    <section id="quiz" class="quiz-section">
+        <div class="container">
+            <h2 style="text-align: center;">Energy Resources Quiz</h2>
+            <div class="quiz-box">
+                <form id="fuelQuiz">
+                    <div class="q-item">
+                        <h4>1. Which process converts buried plants into coal?</h4>
+                        <div class="options">
+                            <label><input type="radio" name="q1" value="wrong"> Evaporation</label>
+                            <label><input type="radio" name="q1" value="correct"> Carbonization</label>
+                            <label><input type="radio" name="q1" value="wrong"> Sedimentation</label>
+                        </div>
+                    </div>
+                    <div class="q-item">
+                        <h4>2. Which petroleum fraction is used for jet aircraft?</h4>
+                        <div class="options">
+                            <label><input type="radio" name="q2" value="correct"> Kerosene</label>
+                            <label><input type="radio" name="q2" value="wrong"> Petrol</label>
+                            <label><input type="radio" name="q2" value="wrong"> Bitumen</label>
+                        </div>
+                    </div>
+                    <div class="q-item">
+                        <h4>3. What is the main component of Natural Gas?</h4>
+                        <div class="options">
+                            <label><input type="radio" name="q3" value="correct"> Methane</label>
+                            <label><input type="radio" name="q3" value="wrong"> Propane</label>
+                            <label><input type="radio" name="q3" value="wrong"> Ethane</label>
+                        </div>
+                    </div>
+                    <div class="q-item">
+                        <h4>4. Which of these is a non-renewable resource?</h4>
+                        <div class="options">
+                            <label><input type="radio" name="q4" value="wrong"> Sunlight</label>
+                            <label><input type="radio" name="q4" value="wrong"> Wind</label>
+                            <label><input type="radio" name="q4" value="correct"> Coal</label>
+                        </div>
+                    </div>
+                    <div class="q-item">
+                        <h4>5. Which by-product of coal is used for making roads?</h4>
+                        <div class="options">
+                            <label><input type="radio" name="q5" value="wrong"> Coke</label>
+                            <label><input type="radio" name="q5" value="correct"> Coal Tar</label>
+                            <label><input type="radio" name="q5" value="wrong"> Coal Gas</label>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center;">
+                        <button type="button" class="btn" onclick="checkQuiz()">Submit Answers</button>
+                    </div>
+                    <div id="quiz-result"></div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <div class="footer-logo">
+                <svg width="24" height="24" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M50 5 L93 27.5 V72.5 L50 95 L7 72.5 V27.5 L50 5Z" fill="none" stroke="#ff9800" stroke-width="10"/>
+                    <circle cx="50" cy="50" r="10" fill="#ff9800"/>
+                </svg>
+                NEXORA
+            </div>
+            <p style="font-size: 0.9rem; color: #555;">&copy; 2023 Nexora Energy Systems. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        function checkQuiz() {
+            const resultDiv = document.getElementById('quiz-result');
+            let score = 0;
+            const total = 5;
+            let answered = 0;
+
+            const answers = {
+                q1: 'correct',
+                q2: 'correct',
+                q3: 'correct',
+                q4: 'correct',
+                q5: 'correct'
+            };
+
+            for (let q in answers) {
+                const selected = document.querySelector(`input[name="${q}"]:checked`);
+                if (selected) {
+                    answered++;
+                    if (selected.value === answers[q]) {
+                        score++;
+                    }
+                }
+            }
+
+            if (answered < total) {
+                resultDiv.style.display = 'block';
+                resultDiv.style.background = '#333';
+                resultDiv.style.color = '#fff';
+                resultDiv.innerText = `Please answer all ${total} questions.`;
+                return;
+            }
+
+            resultDiv.style.display = 'block';
+            if (score === total) {
+                resultDiv.style.background = 'var(--fuel-orange)';
+                resultDiv.style.color = '#000';
+                resultDiv.innerHTML = `REFINING COMPLETE.<br>Score: ${score}/${total}`;
+            } else {
+                resultDiv.style.background = '#ff1744';
+                resultDiv.style.color = '#fff';
+                resultDiv.innerHTML = `SYSTEM FAILURE.<br>Score: ${score}/${total}. Try again.`;
+            }
+        }
+    </script>
+</body>
+</html>
